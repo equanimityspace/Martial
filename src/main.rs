@@ -1,20 +1,33 @@
-// NOTE: quickstart from poise docs
-
 use poise::serenity_prelude as serenity;
+use poise::serenity_prelude::CacheHttp;
 
-struct Data {} // User data, stored and accessible in command invocations
+use serenity::builder::CreateCommand;
+
+mod commands;
+
 type Error = Box<dyn std::error::Error + Send + Sync>;
 type Context<'a> = poise::Context<'a, Data, Error>;
 
-// Test ping function
+// user data passed to commands
+#[derive(Debug, Clone)]
+pub struct Data {}
+
+// init
 #[tokio::main]
 async fn main() {
+    println!("starting...");
+
     let token = std::env::var("DISCORD_TOKEN").expect("missing DISCORD_TOKEN");
-    let intents = serenity::GatewayIntents::non_privileged();
+
+    let intents =
+        serenity::GatewayIntents::non_privileged() | serenity::GatewayIntents::MESSAGE_CONTENT;
 
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
-            commands: vec![ping()],
+            commands: vec![
+                // TODO: add commands
+                // commands::file:function
+            ],
             ..Default::default()
         })
         .setup(|ctx, _ready, framework| {
@@ -29,11 +42,6 @@ async fn main() {
         .framework(framework)
         .await;
     client.unwrap().start().await.unwrap();
-}
 
-#[poise::command(slash_command, prefix_command)]
-async fn ping(ctx: Context<'_>) -> Result<(), Error> {
-    let response = format!("Pong!");
-    ctx.reply(response).await?;
-    Ok(())
+    println!("Martial is now running...");
 }
