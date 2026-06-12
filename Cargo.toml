@@ -1,0 +1,11 @@
+[package]
+name = "martial"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.96"
+
+[dependencies]
+serenity = "0.12.5"
+tokio = { version = "1.52.3", features = ["full"] }
+poise = "0.6.2"
+c2pa = "0.88.0"
