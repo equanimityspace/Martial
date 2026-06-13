@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use martial::{Data, commands};
 use poise::serenity_prelude as serenity;
 
@@ -13,7 +15,16 @@ async fn main() {
 
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
-            commands: vec![commands::verify::verify()],
+            prefix_options: poise::PrefixFrameworkOptions {
+                prefix: Some(":".into()),
+                edit_tracker: Some(Arc::new(poise::EditTracker::for_timespan(
+                    std::time::Duration::from_secs(300),
+                ))),
+                case_insensitive_commands: true,
+                ..Default::default()
+            },
+
+            commands: vec![commands::verify::verify(), commands::ping::ping()],
             ..Default::default()
         })
         .setup(|ctx, _ready, framework| {
