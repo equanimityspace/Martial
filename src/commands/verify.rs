@@ -30,7 +30,7 @@ pub async fn verify(
 
             // create reader
             let c2pa_context =
-                C2paContext::new().with_settings(include_str!("../../config.json"))?;
+                C2paContext::new().with_settings(include_str!("../../config.toml"))?;
             let reader = Reader::from_context(c2pa_context).with_stream(content_type, stream)?;
 
             let json_manifest = reader.json().to_string();

@@ -1,5 +1,4 @@
 pub mod commands;
-pub mod reader;
 
 pub struct Data {}
 pub type Context<'a> = poise::Context<'a, Data, Error>;
