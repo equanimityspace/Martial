@@ -24,7 +24,7 @@ async fn main() {
                 ..Default::default()
             },
 
-            commands: vec![commands::verify::verify(), commands::ping::ping()],
+            commands: vec![commands::verify::verify()],
             ..Default::default()
         })
         .setup(|ctx, _ready, framework| {
