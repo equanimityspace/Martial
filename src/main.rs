@@ -24,10 +24,10 @@ async fn main() {
         })
         .build();
 
+    println!("Martial is now running...");
+
     let client = serenity::ClientBuilder::new(token, intents)
         .framework(framework)
         .await;
     client.unwrap().start().await.unwrap();
-
-    println!("Martial is now running...");
 }
