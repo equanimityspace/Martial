@@ -1,0 +1,15 @@
+// https://opensource.contentauthenticity.org/docs/rust-sdk/docs/context-settings
+// WARNING: development configuration
+// TODO: implement production configuration
+{
+  "version": 1,
+  "verify": {
+    "verify_trust": false,
+    "verify_timestamp_trust": false
+  },
+  "builder": {
+    "thumbnail": {
+      "enabled": false
+    }
+  }
+}
