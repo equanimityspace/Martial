@@ -16,7 +16,7 @@ pub struct ManifestSummary {
 // NOTE: should return manifest.json or nothing_found.json
 // which will be unwrapped during bot response
 
-pub async fn GetManifest(
+pub async fn get_manifest(
     files: Vec<poise::serenity_prelude::Attachment>,
 ) -> Result<Vec<ManifestSummary>, Error> {
     // c2pa requires attachment byte info

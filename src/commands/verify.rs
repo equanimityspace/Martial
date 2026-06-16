@@ -1,6 +1,6 @@
 // gets media from user and verifys with c2pa
 
-use crate::modules::get_manifest::GetManifest;
+use crate::modules::get_manifest::get_manifest;
 use crate::modules::modal::build_verification_modal;
 use crate::{Context, Error};
 
@@ -22,7 +22,7 @@ pub async fn verify(
     ctx.defer().await?;
 
     // vec<ManifestSummary>
-    let summaries = GetManifest(attachments).await?;
+    let summaries = get_manifest(attachments).await?;
     for summary in summaries {
         let modal = build_verification_modal(summary);
         // ctx.send accepts models but need to create reply first
