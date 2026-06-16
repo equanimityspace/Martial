@@ -90,7 +90,6 @@ pub async fn get_manifest(
         }
     }
 
-    // TODO: have thumbnail urls without manifest. c2pa thumbnails maybe?
     if summaries.is_empty() {
         summaries.push(ManifestSummary {
             issuer: "No Content Credentials Found".to_string(),
