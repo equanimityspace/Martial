@@ -38,6 +38,7 @@ pub async fn get_manifest(
 
         // extract resources to return to discord
         // need to look through all manifests
+        let mut ai_present = false;
 
         for manifest in reader.manifests().values() {
             let issuer = manifest
@@ -45,10 +46,15 @@ pub async fn get_manifest(
                 .unwrap_or_else(|| "Unknown Origin".to_string());
 
             // get digital source types for generative actions if not None
-            let mut ai_present = false;
             let mut ai_description = None;
 
             if let Ok(actions_assertion) = manifest.find_assertion::<Actions>(Actions::LABEL) {
+                // should? skip all manifests after AI has been found to prevent multiple embeds for
+                // one attachment
+                if ai_present {
+                    break;
+                };
+
                 for action in &actions_assertion.actions {
                     let name = action.action();
                     println!("sources: {:?}", action.source_type());
