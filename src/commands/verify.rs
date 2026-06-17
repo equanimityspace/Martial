@@ -21,13 +21,21 @@ pub async fn verify(
 
     ctx.defer().await?;
 
-    // vec<ManifestSummary>
-    let summaries = get_manifest(attachments).await?;
-    for summary in summaries {
-        let modal = build_verification_modal(summary);
-        // ctx.send accepts models but need to create reply first
-        ctx.send(poise::CreateReply::default().embed(modal).reply(false))
-            .await?;
+    // stupid hack to get the correct thumbnail in each embed
+    let summaries = get_manifest(&attachments).await?;
+
+    let mut count = 0;
+    for i in 0..attachments.len() {
+        let thumbnail = &attachments[i];
+
+        for summary in &summaries {
+            let modal = build_verification_modal(summary, &thumbnail);
+            // ctx.send accepts models but need to create reply first
+            ctx.send(poise::CreateReply::default().embed(modal).reply(false))
+                .await?;
+
+            count = count + 1;
+        }
     }
 
     Ok(())

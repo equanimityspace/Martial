@@ -4,7 +4,7 @@ use std::io::Cursor;
 use crate::Error;
 
 // structure for discord modal.rs whenever I do that
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ManifestSummary {
     pub issuer: String,
     pub ai_present: bool,
@@ -16,7 +16,7 @@ pub struct ManifestSummary {
 // which will be unwrapped during bot response
 
 pub async fn get_manifest(
-    files: Vec<poise::serenity_prelude::Attachment>,
+    files: &Vec<poise::serenity_prelude::Attachment>,
 ) -> Result<Vec<ManifestSummary>, Error> {
     // c2pa requires attachment byte info
     // loaded into memory so make sure it doesnt become too large
