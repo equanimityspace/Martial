@@ -4,7 +4,7 @@ use std::io::Cursor;
 use crate::Error;
 
 // structure for discord modal.rs whenever I do that
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ManifestSummary {
     pub issuer: String,
     pub ai_present: bool,
@@ -16,7 +16,7 @@ pub struct ManifestSummary {
 // which will be unwrapped during bot response
 
 pub async fn get_manifest(
-    files: Vec<poise::serenity_prelude::Attachment>,
+    files: &Vec<poise::serenity_prelude::Attachment>,
 ) -> Result<Vec<ManifestSummary>, Error> {
     // c2pa requires attachment byte info
     // loaded into memory so make sure it doesnt become too large
@@ -38,6 +38,7 @@ pub async fn get_manifest(
 
         // extract resources to return to discord
         // need to look through all manifests
+        let mut ai_present = false;
 
         for manifest in reader.manifests().values() {
             let issuer = manifest
@@ -45,10 +46,15 @@ pub async fn get_manifest(
                 .unwrap_or_else(|| "Unknown Origin".to_string());
 
             // get digital source types for generative actions if not None
-            let mut ai_present = false;
             let mut ai_description = None;
 
             if let Ok(actions_assertion) = manifest.find_assertion::<Actions>(Actions::LABEL) {
+                // should? skip all manifests after AI has been found to prevent multiple embeds for
+                // one attachment
+                if ai_present {
+                    break;
+                };
+
                 for action in &actions_assertion.actions {
                     let name = action.action();
                     println!("sources: {:?}", action.source_type());
@@ -83,9 +89,9 @@ pub async fn get_manifest(
                 }
             }
             summaries.push(ManifestSummary {
-                issuer,
-                ai_present,
-                ai_description,
+                issuer: issuer,
+                ai_present: ai_present,
+                ai_description: ai_description,
             });
         }
     }
