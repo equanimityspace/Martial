@@ -22,20 +22,20 @@ pub async fn verify(
     ctx.defer().await?;
 
     // stupid hack to get the correct thumbnail in each embed
-    let summaries = get_manifest(&attachments).await?;
+    //let summaries = get_manifest(attachments.clone()).await?;
 
     let mut count = 0;
-    for i in 0..attachments.len() {
-        let thumbnail = &attachments[i];
+    for attachment in attachments {
+        let summary = get_manifest(&attachment).await?;
 
-        for summary in &summaries {
-            let modal = build_verification_modal(summary, &thumbnail);
-            // ctx.send accepts models but need to create reply first
-            ctx.send(poise::CreateReply::default().embed(modal).reply(false))
-                .await?;
+        let thumbnail = attachment;
 
-            count = count + 1;
-        }
+        let modal = build_verification_modal(summary, thumbnail);
+        // ctx.send accepts models but need to create reply first
+        ctx.send(poise::CreateReply::default().embed(modal).reply(false))
+            .await?;
+
+        count = count + 1;
     }
 
     Ok(())
