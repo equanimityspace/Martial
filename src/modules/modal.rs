@@ -19,14 +19,14 @@ pub fn build_verification_modal(
         embed = embed
             .field("AI Involvement", "⚠️ Generative AI Detected", true)
             .color(0xffcc00);
-
-        if let Some(description) = summary.ai_description {
-            embed = embed.field("AI Details", description, false);
-        }
     } else {
         embed = embed
             .field("AI Involvement", "✅ No generative AI use detected", true)
             .color(0x00ff00);
+    }
+
+    if let Some(description) = summary.ai_description {
+        embed = embed.field("AI Details", description, false);
     }
 
     embed
