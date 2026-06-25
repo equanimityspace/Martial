@@ -18,11 +18,11 @@ pub struct ManifestSummary {
 pub async fn get_manifest(
     file: &poise::serenity_prelude::Attachment,
 ) -> Result<ManifestSummary, Error> {
-    // result for no JUMBF data
+    // result if no JUMBF data
     let mut result = ManifestSummary {
-        issuer: "".to_string(),
+        issuer: "None".to_string(),
         ai_present: false,
-        ai_description: Some("No Content Credentials found!".to_string()),
+        ai_description: Some("No Content Credentials Found".to_string()),
     };
 
     // download attachment into memory
@@ -38,7 +38,17 @@ pub async fn get_manifest(
     let stream = Cursor::new(file_data);
 
     let context = Context::new().with_settings(include_str!("../../config.toml"))?;
-    let reader = Reader::from_context(context).with_stream(content_type, stream)?;
+    let reader = match Reader::from_context(context).with_stream(content_type, stream) {
+        Ok(r) => r,
+        Err(e) => {
+            // if no JUMBF data to check
+            return Ok(ManifestSummary {
+                issuer: e.to_string(),
+                ai_present: false,
+                ai_description: Some("No Content Credentials found".to_string()),
+            });
+        }
+    };
 
     // extract resources to return to discord
     // one attachment may have multiple manifests
@@ -100,12 +110,10 @@ pub async fn get_manifest(
         }
     }
 
-    // FIX: make this more clear about what's happening
-    //
-    // if no AI was found (or if no JUMBF data exists) default to this
-    if result.ai_present {
+    // If JUMBF data and no AI
+    if ai_present == false {
         (result = ManifestSummary {
-            issuer: "No Content Credentials Found".to_string(),
+            issuer: "".to_string(),
             ai_present: false,
             ai_description: None,
         });
