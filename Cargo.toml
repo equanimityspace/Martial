@@ -11,3 +11,4 @@ poise = "0.6.2"
 c2pa = { version = "0.88.0", features = ["file_io", "add_thumbnails"] }
 openssl = "0.10.81"
 futures = "0.3.32"
+chrono = "0.4.45"

@@ -6,6 +6,7 @@ use poise::serenity_prelude as serenity;
 // init
 #[tokio::main]
 async fn main() {
+    // embed resources in bot binary
     println!("starting martial...");
 
     let token = std::env::var("DISCORD_TOKEN").expect("missing DISCORD_TOKEN");
@@ -24,7 +25,7 @@ async fn main() {
                 ..Default::default()
             },
 
-            commands: vec![commands::verify::verify()],
+            commands: vec![commands::verify::verify(), commands::info::about()],
             ..Default::default()
         })
         .setup(|ctx, _ready, framework| {
