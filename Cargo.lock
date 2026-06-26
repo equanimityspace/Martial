@@ -1773,6 +1773,7 @@ name = "martial"
 version = "0.1.0"
 dependencies = [
  "c2pa",
+ "chrono",
  "futures",
  "openssl",
  "poise",
