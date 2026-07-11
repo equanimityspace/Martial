@@ -1,7 +1,7 @@
 // gets media from user and verifys with c2pa
 
+use crate::modules::embed::build_verification_embed;
 use crate::modules::get_manifest::get_manifest;
-use crate::modules::modal::build_verification_modal;
 use crate::{Context, Error};
 
 #[poise::command(slash_command, help_text_fn = "help_verify")]
@@ -30,9 +30,9 @@ pub async fn verify(
 
         let thumbnail = attachment;
 
-        let modal = build_verification_modal(summary, thumbnail);
+        let embed = build_verification_embed(summary, thumbnail);
         // ctx.send accepts models but need to create reply first
-        ctx.send(poise::CreateReply::default().embed(modal).reply(false))
+        ctx.send(poise::CreateReply::default().embed(embed).reply(false))
             .await?;
 
         count = count + 1;

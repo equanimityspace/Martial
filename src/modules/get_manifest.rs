@@ -3,7 +3,7 @@ use std::io::Cursor;
 
 use crate::Error;
 
-// information to be output for attachment
+// Consistent structure for embed output
 #[derive(Debug)]
 pub struct ManifestSummary {
     pub issuer: String,
@@ -11,9 +11,10 @@ pub struct ManifestSummary {
     pub ai_description: Option<String>,
 }
 
-// Uses file bytes to find c2pa manifest if it exists
-// NOTE: should return manifest.json or nothing_found.json
-// which will be unwrapped during bot response
+// When examining media JUMBF data there are three possible outcomes:
+// 1. Media has no JUMBF data (no content credentials signature)
+// 2. Media is signed by content credentials, no generative AI use found
+// 3. Media is signed by content credentials, generative AI use found
 
 pub async fn get_manifest(
     file: &poise::serenity_prelude::Attachment,

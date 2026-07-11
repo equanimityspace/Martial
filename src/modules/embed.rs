@@ -1,9 +1,10 @@
+use chrono::Utc;
 use poise::serenity_prelude as serenity;
 
 use crate::modules::get_manifest::ManifestSummary;
 
 // verification results
-pub fn build_verification_modal(
+pub fn build_verification_embed(
     summary: ManifestSummary,
     attachment: serenity::Attachment,
 ) -> serenity::CreateEmbed {
@@ -28,6 +29,12 @@ pub fn build_verification_modal(
     if let Some(description) = summary.ai_description {
         embed = embed.field("AI Details", description, false);
     }
+
+    // timestamp
+    let timestamp =
+        serenity::Timestamp::parse(&Utc::now().to_rfc3339()).expect("Invalid Timestamp");
+
+    embed = embed.timestamp(timestamp);
 
     embed
 }

@@ -1,2 +1,2 @@
+pub mod embed;
 pub mod get_manifest;
-pub mod modal;

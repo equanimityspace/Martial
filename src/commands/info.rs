@@ -1,4 +1,4 @@
-// Displays general information on Content Credentials and c2pa
+// Show general information on Content Credentials and c2pa
 
 use crate::{Context, Error};
 use chrono::Utc;
