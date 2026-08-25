@@ -9,7 +9,7 @@ async fn main() {
     // embed resources in bot binary
     println!("starting martial...");
 
-    let token = std::env::var("DISCORD_TOKEN").expect("missing DISCORD_TOKEN");
+    let token = std::env::var("MARTIAL_TOKEN").expect("missing MARTIAL_TOKEN");
 
     let intents =
         serenity::GatewayIntents::non_privileged() | serenity::GatewayIntents::MESSAGE_CONTENT;

@@ -41,14 +41,15 @@ pub async fn get_manifest(
     let context = Context::new().with_settings(include_str!("../../config.toml"))?;
     let reader = match Reader::from_context(context).with_stream(content_type, stream) {
         Ok(r) => r,
-        Err(e) => {
-            // if no JUMBF data to check
+        // no JUMBF data to check
+        Err(e) if e.to_string().contains("no JUMBF found") => {
             return Ok(ManifestSummary {
                 issuer: e.to_string(),
                 ai_present: false,
                 ai_description: Some("No Content Credentials found".to_string()),
             });
         }
+        Err(e) => return Err(format!("C2PA Parse Error: {}", e).into()),
     };
 
     // extract resources to return to discord
