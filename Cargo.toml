@@ -6,3 +6,6 @@ rust-version = "1.96"
 
 [dependencies]
 c2pa = { version = "0.88.0", features = ["file_io", "add_thumbnails"] }
+clap = { version = "4.6.6", features = ["derive"] }
+tokio = { version = "1.35", features = ["macros", "rt-multi-thread"] }
+infer = "0.22.0"
