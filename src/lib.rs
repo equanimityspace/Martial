@@ -1,6 +1,5 @@
-pub mod commands;
-pub mod modules;
+pub mod core;
+pub mod types;
 
-pub struct Data {}
-pub type Context<'a> = poise::Context<'a, Data, Error>;
-pub type Error = Box<dyn std::error::Error + Send + Sync>;
+pub use core::verify::verify_file;
+pub use types::ManifestSummary;
