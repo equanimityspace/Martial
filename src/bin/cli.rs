@@ -30,7 +30,7 @@ async fn main() {
     let mime_type = match infer::get(&file_bytes) {
         Some(kind) => kind.mime_type(),
         None => {
-            eprintln!("Error: Could not determine the MIME type of this file");
+            eprintln!("Error: Could not determine the mime type of this file");
             std::process::exit(1);
         }
     };
