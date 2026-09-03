@@ -4,7 +4,7 @@ The Roman poet Martial was born in 40AD and is known for being among the [first 
 
 Martial uses Content Credentials which is supported by the Coalition for Content Provenance and Authenticity (C2PA) and Content Authenticity Initiative (CAI).
 
-CAI: `https://contentauthenticity.org/`
+CAI: `https://contentauthenticity.org/`  
 C2PA: `https://c2pa.org/`, `https://contentcredentials.org/`
 
 ---
@@ -24,7 +24,7 @@ C2PA: `https://c2pa.org/`, `https://contentcredentials.org/`
 | `jxl` | `image/jxl` |
 | `m4a` | `audio/mp4` |
 | `mp3` | `audio/mpeg` |
-| `mp4` | `video/mp4`, `application/mp4` Fragmented MP4 (DASH) supported only for file-based operations from the Rust library. |
+| `mp4` | `video/mp4`, `application/mp4`<br> Fragmented MP4 (DASH) supported only for file-based operations from the Rust library. |
 | `mov` | `video/quicktime` |
 | `pdf` | `application/pdf` **(read-only)** |
 | `png` | `image/png` |
