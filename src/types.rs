@@ -2,7 +2,7 @@
 pub struct ManifestSummary {
     pub issuer: String,
     pub ai_present: bool,
-    pub ai_description: Option<String>,
+    pub ai_description: Vec<String>,
     pub error: String,
 }
 
@@ -11,7 +11,7 @@ impl Default for ManifestSummary {
         Self {
             issuer: "None".to_string(),
             ai_present: false,
-            ai_description: None,
+            ai_description: vec![String::new()],
             error: "".to_string(),
         }
     }
@@ -22,7 +22,7 @@ impl ManifestSummary {
         Self {
             issuer: "None".to_string(),
             ai_present: false,
-            ai_description: Some("No Content Credentials Manifests Found".to_string()),
+            ai_description: vec!["No Content Credentials Manifests Found".to_string()],
             error: "".to_string(),
         }
     }

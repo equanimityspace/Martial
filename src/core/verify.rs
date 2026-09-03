@@ -7,47 +7,50 @@ use std::io::Cursor;
 // 2. Media is signed by content credentials, no generative AI use found
 // 3. Media is signed by content credentials, generative AI use found
 
-pub async fn verify_file(file: Vec<u8>, mime_type: &str) -> ManifestSummary {
+pub async fn verify_file(file: Vec<u8>, mime_type: &str) -> Vec<ManifestSummary> {
     // create stream and c2pa reader
     let stream = Cursor::new(file);
 
     let context = match Context::new().with_settings(include_str!("../../config.toml")) {
         Ok(r) => r,
         Err(e) => {
-            return ManifestSummary {
+            return vec![ManifestSummary {
                 issuer: "Error".to_string(),
                 ai_present: false,
-                ai_description: None,
+                ai_description: Vec::new(),
                 error: format!("Failed to create C2PA Context:\n{}", e),
-            };
+            }];
         }
     };
 
     let reader = match Reader::from_context(context).with_stream(mime_type, stream) {
         Ok(r) => r,
-        Err(_) => return ManifestSummary::no_credentials(),
+        Err(_) => return vec![ManifestSummary::no_credentials()],
     };
 
-    let mut summary = ManifestSummary::default();
+    let mut summaries = Vec::new();
 
     for manifest in reader.manifests().values() {
-        if summary.issuer == "None" {
-            summary.issuer = manifest.issuer().unwrap_or_else(|| "Unknown".to_string());
-        }
+        let issuer = manifest.issuer().unwrap_or_else(|| "Unknown".to_string());
+        let ai_info = check_ai_use(manifest);
+        let ai_present = !ai_info.is_empty();
 
-        if let Some(ai_info) = check_ai_use(manifest) {
-            summary.ai_present = true;
-            summary.ai_description = Some(ai_info);
-            summary.error = "".to_string();
-            break;
-        }
+        summaries.push(ManifestSummary {
+            issuer,
+            ai_present,
+            ai_description: ai_info,
+            error: String::new(),
+        });
     }
-
-    summary
+    if summaries.is_empty() {
+        vec![ManifestSummary::no_credentials()]
+    } else {
+        summaries
+    }
 }
 
-fn check_ai_use(manifest: &Manifest) -> Option<String> {
-    let mut ai_info: Option<String> = None;
+fn check_ai_use(manifest: &Manifest) -> Vec<String> {
+    let mut ai_info: Vec<String> = Vec::new();
 
     if let Ok(actions_assertion) = manifest.find_assertion::<Actions>(Actions::LABEL) {
         for action in &actions_assertion.actions {
@@ -72,11 +75,8 @@ fn check_ai_use(manifest: &Manifest) -> Option<String> {
                         }
                         _ => None,
                     };
-                    // FIX: get all ai-related history rather than first-found
-                    // TODO: consider grabbing all manifest history and displaying it (new feature)
                     if let Some(description) = matched_str {
-                        ai_info = Some(description.to_string());
-                        break;
+                        ai_info.push(description.to_string());
                     }
                 }
             }
