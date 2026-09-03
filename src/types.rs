@@ -12,7 +12,7 @@ impl Default for ManifestSummary {
             issuer: "None".to_string(),
             ai_present: false,
             ai_description: vec![String::new()],
-            error: "".to_string(),
+            error: String::new(),
         }
     }
 }
@@ -23,7 +23,7 @@ impl ManifestSummary {
             issuer: "None".to_string(),
             ai_present: false,
             ai_description: vec!["No Content Credentials Manifests Found".to_string()],
-            error: "".to_string(),
+            error: String::new(),
         }
     }
 }
