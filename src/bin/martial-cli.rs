@@ -4,13 +4,13 @@ use std::path::PathBuf;
 
 use martial::core::verify::verify_file;
 
-// CLI tool for checking C2PA manifests for generative AI use
+/// CLI tool for checking C2PA manifests for generative AI use
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    // path to media
+    /// path to media to verify
     #[arg(short, long)]
-    file: PathBuf,
+    path: PathBuf,
 }
 
 #[tokio::main]
@@ -18,10 +18,10 @@ async fn main() {
     let args = Args::parse();
 
     // read file into Vec<u8>
-    let file_bytes = match fs::read(&args.file) {
+    let file_bytes = match fs::read(&args.path) {
         Ok(r) => r,
         Err(e) => {
-            eprintln!("Error reading file '{}': {}", args.file.display(), e);
+            eprintln!("Error reading file '{}': {}", args.path.display(), e);
             std::process::exit(1);
         }
     };
@@ -35,7 +35,7 @@ async fn main() {
         }
     };
 
-    println!("Analyzing '{}' ({})", args.file.display(), mime_type);
+    println!("Analyzing '{}' ({})", args.path.display(), mime_type);
     let summary = verify_file(file_bytes, mime_type).await;
 
     println!("{:#?}", summary);
