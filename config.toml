@@ -1,4 +1,4 @@
-# https://opensource.contentauthenticity.org/docs/rust-sdk/docs/context-settings
+# https://opensource.contentauthenticity.org/docs/manifest/json-ref/settings-schema/#verify
 # WARNING: development configuration
 # TODO: implement production configuration
 version = 1
