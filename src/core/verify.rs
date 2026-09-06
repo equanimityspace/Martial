@@ -49,6 +49,7 @@ pub async fn verify_file(file: Vec<u8>, mime_type: &str) -> Vec<ManifestSummary>
     }
 }
 
+// Takes a single manifest, returns actions taken by generative AI
 fn check_ai_use(manifest: &Manifest) -> Vec<String> {
     let mut ai_info: Vec<String> = Vec::new();
 
