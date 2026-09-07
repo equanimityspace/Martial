@@ -27,9 +27,8 @@ fn use_color() -> bool {
     env::var_os("NO_COLOR").is_none() && io::stdout().is_terminal()
 }
 
-fn format_output(summary: Vec<ManifestSummary>) -> String {
+fn format_output(summary: Vec<ManifestSummary>, use_color: bool) -> String {
     let mut out = String::new();
-    let use_color = use_color();
 
     // styles
     let header_style = Style::new()
@@ -105,8 +104,32 @@ async fn main() {
 
     println!("Analyzing '{}' ({})\n", args.path.display(), mime_type);
     let summary = verify_file(file_bytes, mime_type).await;
-
-    let output_formatted = format_output(summary);
+    let use_color = use_color();
+    let output_formatted = format_output(summary, use_color);
 
     println!("{}", output_formatted);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    // if NO_COLOR, must absolutely not use ansi escape codes
+    fn test_format_output_color() {
+        let summary = vec![ManifestSummary::default()];
+        let use_color = true;
+        let output = format_output(summary, use_color);
+
+        assert!(output.contains("\x1b["));
+    }
+
+    #[test]
+    fn test_format_output_no_color() {
+        let summary = vec![ManifestSummary::default()];
+        let use_color = false;
+        let output = format_output(summary, use_color);
+
+        assert!(!output.contains("\x1b["));
+    }
 }
