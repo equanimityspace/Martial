@@ -9,6 +9,8 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+      time: "08:00"
+      timezone: "America/Denver"
     assignees:
       - "equanimityspace"
     commit-message:
