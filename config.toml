@@ -1,4 +1,4 @@
-# https://opensource.contentauthenticity.org/docs/manifest/json-ref/settings-schema/#verify
+# https://opensource.contentauthenticity.org/docs/sdk-repos/c2pa-rs/docs/context-settings
 # WARNING: development configuration
 # TODO: implement production configuration
 version = 1
